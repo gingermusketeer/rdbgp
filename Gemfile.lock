@@ -10,6 +10,7 @@ GEM
       slop (~> 3.4, >= 3.4.5)
     powerpack (0.0.9)
     rainbow (2.0.0)
+    rake (10.3.2)
     rspec (3.1.0)
       rspec-core (~> 3.1.0)
       rspec-expectations (~> 3.1.0)
@@ -35,5 +36,6 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  rake
   rspec
   rubocop
