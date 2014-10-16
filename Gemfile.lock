@@ -31,6 +31,7 @@ GEM
       ruby-progressbar (~> 1.4)
     ruby-progressbar (1.6.0)
     slop (3.6.0)
+    xml-simple (1.1.4)
 
 PLATFORMS
   ruby
@@ -39,3 +40,4 @@ DEPENDENCIES
   rake
   rspec
   rubocop
+  xml-simple

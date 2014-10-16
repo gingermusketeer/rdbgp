@@ -25,14 +25,15 @@ describe Message::Init do
 
       it 'uses passed in properties' do
         expect(subject.to_xml).to eql(
-          %q(<init appid="APPID"
-      idekey="IDE_KEY"
-      session="DBGP_COOKIE"
-      thread="THREAD_ID"
-      parent="PARENT_APPID"
-      language="LANGUAGE_NAME"
-      protocol_version="1.0"
-      fileuri="file://path/to/file">)
+          '<?xml version="1.0" encoding="UTF-8"?>' + "\n"\
+          '<init appid="APPID"'\
+                ' idekey="IDE_KEY"'\
+                ' session="DBGP_COOKIE"'\
+                ' thread="THREAD_ID"'\
+                ' parent="PARENT_APPID"'\
+                ' language="LANGUAGE_NAME"'\
+                ' protocol_version="1.0"'\
+                ' fileuri="file://path/to/file" />' + "\n"
         )
       end
     end
@@ -48,14 +49,15 @@ describe Message::Init do
         allow(ENV).to receive(:[]).with('APPID').and_return 'ENV_PARENT_APPID'
 
         expect(subject.to_xml).to eql(
-          %q(<init appid="APPID"
-      idekey="ENV_DBGP_IDEKEY"
-      session="ENV_DBGP_COOKIE"
-      thread="THREAD_ID"
-      parent="ENV_PARENT_APPID"
-      language="LANGUAGE_NAME"
-      protocol_version="1.0"
-      fileuri="file://path/to/file">)
+        '<?xml version="1.0" encoding="UTF-8"?>' + "\n"\
+        '<init appid="APPID"'\
+              ' idekey="ENV_DBGP_IDEKEY"'\
+              ' session="ENV_DBGP_COOKIE"'\
+              ' thread="THREAD_ID"'\
+              ' parent="ENV_PARENT_APPID"'\
+              ' language="LANGUAGE_NAME"'\
+              ' protocol_version="1.0"'\
+              ' fileuri="file://path/to/file" />' + "\n"
         )
       end
     end

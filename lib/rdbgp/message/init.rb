@@ -1,3 +1,4 @@
+require 'xmlsimple'
 module Message
   # Handles serializing init messages
   class Init
@@ -28,14 +29,24 @@ module Message
     end
 
     def to_xml
-      %(<init appid="#{appid}"
-      idekey="#{idekey}"
-      session="#{session}"
-      thread="#{thread}"
-      parent="#{parent}"
-      language="#{language}"
-      protocol_version="#{protocol_version}"
-      fileuri="#{fileuri}">)
+      XmlSimple.xml_out(to_h, xml_config)
+    end
+
+    def to_h
+      {
+        init: {
+          appid: appid, idekey: idekey, session: session,
+          thread: thread, parent: parent, language: language,
+          protocol_version: protocol_version, fileuri: fileuri
+        }
+      }
+    end
+
+    def xml_config
+      {
+        keep_root: true,
+        xmldeclaration: '<?xml version="1.0" encoding="UTF-8"?>'
+      }
     end
   end
 end
