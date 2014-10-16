@@ -35,11 +35,15 @@ module Message
     def to_h
       {
         init: {
-          appid: appid, idekey: idekey, session: session,
+          xmlns: xml_namespace, appid: appid, idekey: idekey, session: session,
           thread: thread, parent: parent, language: language,
           protocol_version: protocol_version, fileuri: fileuri
         }
       }
+    end
+
+    def xml_namespace
+      'urn:debugger_protocol_v1'
     end
 
     def xml_config

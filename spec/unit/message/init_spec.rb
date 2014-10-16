@@ -26,7 +26,8 @@ describe Message::Init do
       it 'uses passed in properties' do
         expect(subject.to_xml).to eql(
           '<?xml version="1.0" encoding="UTF-8"?>' + "\n"\
-          '<init appid="APPID"'\
+          '<init xmlns="urn:debugger_protocol_v1"'\
+                ' appid="APPID"'\
                 ' idekey="IDE_KEY"'\
                 ' session="DBGP_COOKIE"'\
                 ' thread="THREAD_ID"'\
@@ -50,7 +51,8 @@ describe Message::Init do
 
         expect(subject.to_xml).to eql(
         '<?xml version="1.0" encoding="UTF-8"?>' + "\n"\
-        '<init appid="APPID"'\
+        '<init xmlns="urn:debugger_protocol_v1"'\
+              ' appid="APPID"'\
               ' idekey="ENV_DBGP_IDEKEY"'\
               ' session="ENV_DBGP_COOKIE"'\
               ' thread="THREAD_ID"'\
