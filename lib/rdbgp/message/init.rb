@@ -32,6 +32,10 @@ module Message
       XmlSimple.xml_out(to_h, xml_config)
     end
 
+    def to_s
+      "#{to_xml.length}\x00#{to_xml}\x00"
+    end
+
     def to_h
       {
         init: {

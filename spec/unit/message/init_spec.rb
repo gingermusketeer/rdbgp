@@ -64,4 +64,13 @@ describe Message::Init do
       end
     end
   end
+
+  describe '#to_s' do
+    before do
+      allow(subject).to receive(:to_xml).and_return('<xml/>')
+    end
+    it 'returns a formatted message' do
+      expect(subject.to_s).to eql "6\x00<xml/>\x00"
+    end
+  end
 end
