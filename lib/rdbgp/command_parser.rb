@@ -28,8 +28,8 @@ class CommandParser
 
     def hashify_flags(flag_array)
       hash = {}
-      flag_array.each_cons(2).each do |group|
-        hash[flag_name_to_sym(group.first)] = group.last
+      flag_array.each_slice(2).each do |group|
+        hash[flag_name_to_sym(group.first)] = group.last.tr('"', '')
       end
       hash
     end
