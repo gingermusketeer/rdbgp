@@ -9,5 +9,15 @@ describe CommandFactory do
       ).to be Command::Status
       expect(command.valid?).to be true
     end
+
+    it 'creates a valid feature_set command' do
+      command = described_class.build(
+        'feature_set -i 1 -n "max_children" -v "2048"'
+      )
+      expect(
+        command.class
+      ).to be Command::FeatureSet
+      expect(command.valid?).to be true
+    end
   end
 end
