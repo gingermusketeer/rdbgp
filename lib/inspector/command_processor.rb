@@ -155,11 +155,28 @@ module Inspector
       end
     end
 
+    def send_init
+      Kernel.puts 'sending init'
+      init = Message::Init.new(
+        appid: 'TEST',
+        idekey: 'TEST',
+        session: 'TEST',
+        thread: 'TEST',
+        parent: 'TEST',
+        language: 'Ruby',
+        protocol_version: '1.0',
+        fileuri: 'file://something.rb'
+      )
+      @interface.send_message(init)
+    end
+
     #
     # Handle byebug commands.
     #
     def process_commands(context, file, line)
       state, commands = preloop(context, file, line)
+
+      send_init
 
       repl(state, commands, context)
 

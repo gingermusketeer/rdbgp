@@ -52,7 +52,6 @@ module Inspector
     def initialize
       super()
       @socket = TCPSocket.new 'localhost', 9000
-      send_init
     end
 
     def close
@@ -82,26 +81,15 @@ module Inspector
       # send_command "PROMPT #{prompt}"
     end
 
+    def send_message(message)
+      @socket.write(message.to_s)
+    end
+
     # def puts(message)
     #   puts('putsing', message)
     # end
 
     private
-
-    def send_init
-      Kernel.puts 'sending init'
-      init = Message::Init.new(
-        appid: 'TEST',
-        idekey: 'TEST',
-        session: 'TEST',
-        thread: 'TEST',
-        parent: 'TEST',
-        language: 'Ruby',
-        protocol_version: '1.0',
-        fileuri: 'file://something.rb'
-      )
-      @socket.write(init.to_s)
-    end
 
     # def send_command(msg)
     #   @socket.puts msg
