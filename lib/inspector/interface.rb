@@ -77,43 +77,11 @@ module Inspector
         end
       end
       puts 'ending readline'
-
-      # send_command "PROMPT #{prompt}"
     end
 
     def send_message(message)
       @socket.write(message.to_s)
     end
 
-    # def puts(message)
-    #   puts('putsing', message)
-    # end
-
-    private
-
-    # def send_command(msg)
-    #   @socket.puts msg
-    #   result = @socket.gets
-    #   fail IOError unless result
-    #   result.chomp
-    # end
   end
 end
-#
-# require 'socket'
-# require_relative './lib/rdbgp/message/init'
-# require_relative './lib/rdbgp/command_factory'
-# s = TCPSocket.new 'localhost', 9000
-# init = Message::Init.new(
-# appid: 'TEST',
-# idekey: 'TEST',
-# session: 'TEST',
-# thread: 'TEST',
-# parent: 'TEST',
-# language: 'Ruby',
-# protocol_version: '1.0',
-# fileuri: 'file://something.rb'
-# )
-# s.write(init.to_s)
-#
-# s.close             # close socket when done

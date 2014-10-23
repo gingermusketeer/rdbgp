@@ -35,7 +35,7 @@ module Inspector
       return filename if ['(irb)', '-e'].include?(filename)
 
       # For now we want resolved filenames
-      if Setting[:basename]
+      if Byebug::Setting[:basename]
         File.basename(filename)
       else
         Pathname.new(filename).cleanpath.to_s
@@ -129,6 +129,7 @@ module Inspector
       # Bind commands to the current state.
       commands = cmds.map do |cmd_class|
         cmd = cmd_class.new(state)
+        # one of these commands is printing out the repl interface
         cmd.execute if cmd.class.always_run >= run_level
         cmd
       end
@@ -155,17 +156,17 @@ module Inspector
       end
     end
 
-    def send_init
+    def send_init(file)
       Kernel.puts 'sending init'
       init = Message::Init.new(
-        appid: 'TEST',
-        idekey: 'TEST',
-        session: 'TEST',
-        thread: 'TEST',
+        appid: 'inspector',
+        idekey: '',
+        session: '',
+        thread: Thread.current.object_id.to_s,
         parent: 'TEST',
         language: 'Ruby',
         protocol_version: '1.0',
-        fileuri: 'file://something.rb'
+        fileuri: "file://#{File.absolute_path(file)}"
       )
       @interface.send_message(init)
     end
@@ -176,7 +177,7 @@ module Inspector
     def process_commands(context, file, line)
       state, commands = preloop(context, file, line)
 
-      send_init
+      send_init(file)
 
       repl(state, commands, context)
 
