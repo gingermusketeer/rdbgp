@@ -1,3 +1,5 @@
+require_relative '../rdbgp/message/response'
+
 module Inspector
   #
   # Processes commands in regular mode
@@ -169,6 +171,7 @@ module Inspector
         fileuri: "file://#{File.absolute_path(file)}"
       )
       @interface.send_message(init)
+      @init_sent = true
     end
 
     def command_mapping
@@ -183,7 +186,7 @@ module Inspector
     def process_commands(context, file, line)
       state, commands = preloop(context, file, line)
 
-      send_init(file)
+      send_init(file) unless @init_sent
 
       repl(state, commands, context)
 
@@ -214,6 +217,13 @@ module Inspector
         end
         cmd.match('step')
         cmd.execute
+        response_message = Message::Response.new(
+          command: 'step_into',
+          status: 'break',
+          reason: 'ok',
+          transaction_id: xdbgp_cmd.parameters.flags[:i]
+        )
+        @interface.send_message(response_message)
         # split_commands(input).each do |cmd|
         #   one_cmd(commands, context, cmd)
         # end
@@ -263,7 +273,7 @@ module Inspector
         @context_was_dead = false
       end
 
-      puts(state.location) if Byebug::Setting[:autolist] == 0
+      # puts(state.location) if Byebug::Setting[:autolist] == 0
 
       # @interface.history.restore if Byebug::Setting[:autosave]
 

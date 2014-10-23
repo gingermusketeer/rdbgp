@@ -1,7 +1,8 @@
 require 'xmlsimple'
+require_relative '../message_base'
 module Message
   # Handles serializing init messages
-  class Init
+  class Init < MessageBase
     attr_reader :appid, :thread, :language, :protocol_version, :fileuri
 
     def initialize(opts)
@@ -28,14 +29,6 @@ module Message
       ENV['APPID'] || @parent
     end
 
-    def to_xml
-      XmlSimple.xml_out(to_h, xml_config)
-    end
-
-    def to_s
-      "#{to_xml.length}\x00#{to_xml}\x00"
-    end
-
     def to_h
       {
         init: {
@@ -43,17 +36,6 @@ module Message
           thread: thread, parent: parent, language: language,
           protocol_version: protocol_version, fileuri: fileuri
         }
-      }
-    end
-
-    def xml_namespace
-      'urn:debugger_protocol_v1'
-    end
-
-    def xml_config
-      {
-        keep_root: true,
-        xmldeclaration: '<?xml version="1.0" encoding="UTF-8"?>'
       }
     end
   end
