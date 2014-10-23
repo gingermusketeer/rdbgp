@@ -1,6 +1,7 @@
 require_relative 'command/status'
 require_relative 'command/feature_set'
 require_relative 'command/step_into'
+require_relative 'command/stack_get'
 require_relative 'command_parser'
 
 # Handles parsing a command and creating the associated command object

@@ -23,5 +23,13 @@ describe CommandFactory do
       expect(command.class).to be Command::StepInto
       expect(command.valid?).to be true
     end
+
+    it 'creates a valid stack_get command' do
+      command = described_class.build(
+        'stack_get -i 4'
+      )
+      expect(command.class).to be Command::StackGet
+      expect(command.valid?).to be true
+    end
   end
 end
