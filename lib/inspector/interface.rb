@@ -64,19 +64,19 @@ module Inspector
       send_command "CONFIRM #{prompt}"
     end
 
-    def read_command(prompt)
-      Kernel.puts 'reading command'
+    def read_command
+      # Kernel.puts 'reading command'
       @buffer ||= ''
       while @buffer += @socket.sysread(1000) # Read lines from socket
-        puts @buffer
+        # puts @buffer
         if @buffer["\x00"]
           raw_command = @buffer[0..@buffer.index("\x00")]
           @buffer.delete!(raw_command)
-          puts raw_command         # and print them
-          puts CommandFactory.build(raw_command).inspect
+          # puts raw_command         # and print them
+          return CommandFactory.build(raw_command)
         end
       end
-      puts 'ending readline'
+      # puts 'ending readline'
     end
 
     def send_message(message)

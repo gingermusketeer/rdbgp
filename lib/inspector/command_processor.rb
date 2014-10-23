@@ -171,6 +171,12 @@ module Inspector
       @interface.send_message(init)
     end
 
+    def command_mapping
+      @command_mapping ||= {
+        Command::StepInto => Byebug::StepCommand,
+      }
+    end
+
     #
     # Handle byebug commands.
     #
@@ -188,26 +194,29 @@ module Inspector
     # Main byebug's REPL
     #
     def repl(state, commands, context)
-      puts context.frame_file
-      puts context.frame_line
+      # puts context.frame_file
+      # puts context.frame_line
       until state.proceed?
-        input = if @interface.command_queue.empty?
-                  @interface.read_command(prompt(context))
-                else
-                  @interface.command_queue.shift
-                end
-        return unless input
+        xdbgp_cmd = @interface.read_command
+        puts 'processing COMMAND'
+        puts xdbgp_cmd.inspect
+        return unless xdbgp_cmd
 
-        if input == ''
-          next unless @last_cmd
-          input = @last_cmd
-        else
-          @last_cmd = input
+        cmd = commands.find { |c| c.class == command_mapping[xdbgp_cmd.class] }
+        unless cmd
+          puts 'Unknown command'
+          puts xdbgp_cmd.inspect
+          next
         end
 
-        split_commands(input).each do |cmd|
-          one_cmd(commands, context, cmd)
+        if context.dead? && !cmd.class.allow_in_post_mortem
+          return errmsg('Command unavailable in post mortem mode.')
         end
+        cmd.match('step')
+        cmd.execute
+        # split_commands(input).each do |cmd|
+        #   one_cmd(commands, context, cmd)
+        # end
       end
     end
 
