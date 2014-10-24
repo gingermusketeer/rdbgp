@@ -1,9 +1,11 @@
 require_relative '../command_base'
-module Command
 
-  class StackGet < CommandBase
+module Command
+  # Handles validating status commands
+  class ContextNames < CommandBase
     def valid?
       validate_flags_present(:i)
+      validate_flags_present(:d)
       errors.empty?
     end
   end

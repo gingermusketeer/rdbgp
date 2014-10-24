@@ -31,5 +31,13 @@ describe CommandFactory do
       expect(command.class).to be Command::StackGet
       expect(command.valid?).to be true
     end
+
+    it 'creates a valid context_names command' do
+      command = described_class.build(
+        'context_names -i 5 -d 0'
+      )
+      expect(command.class).to be Command::ContextNames
+      expect(command.valid?).to be true
+    end
   end
 end
