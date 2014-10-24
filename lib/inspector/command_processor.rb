@@ -233,6 +233,39 @@ module Inspector
           next
         end
 
+        if xdbgp_cmd.class == Command::ContextGet
+          puts 'LOCAL VARIABLES'
+          puts context.frame_locals.inspect
+          properties = []
+          # context.frame_locals.keys.each do |var_name, value|
+          #
+          # end
+
+          response_message = Message::Response.new(
+            command: 'context_get',
+            transaction_id: xdbgp_cmd.parameters.flags[:i]
+            # property: [
+            #   {
+            #     name: "short_name",
+            #     fullname: "long_name",
+            #     type: "data_type",
+            #     classname: "name_of_object_class",
+            #     constant: "0|1",
+            #     children: "0|1",
+            #     size: "{NUM}",
+            #     page: "{NUM}",
+            #     pagesize: "{NUM}",
+            #     address: "{NUM}",
+            #     key: "language_dependent_key",
+            #     encoding: "base64|none",
+            #     numchildren: "{NUM}"
+            #   }
+            # ]
+          )
+          @interface.send_message(response_message)
+          next
+        end
+
         cmd = commands.find { |c| c.class == command_mapping[xdbgp_cmd.class] }
         unless cmd
           puts 'Unknown command'
