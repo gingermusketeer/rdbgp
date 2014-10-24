@@ -205,6 +205,21 @@ module Inspector
         puts xdbgp_cmd.inspect
         return unless xdbgp_cmd
 
+        if xdbgp_cmd.class == Command::StackGet
+          response_message = Message::Response.new(
+            command: 'stack_get',
+            transaction_id: xdbgp_cmd.parameters.flags[:i],
+            stack: {
+              level: 0,
+              type: 'file',
+              filename: "file://#{File.absolute_path(context.frame_file(0))}",
+              lineno: context.frame_line(0)
+            }
+          )
+          @interface.send_message(response_message)
+          next
+        end
+
         cmd = commands.find { |c| c.class == command_mapping[xdbgp_cmd.class] }
         unless cmd
           puts 'Unknown command'
