@@ -1,3 +1,4 @@
+require "base64"
 require_relative '../rdbgp/message/response'
 
 module Inspector
@@ -261,6 +262,22 @@ module Inspector
             #     numchildren: "{NUM}"
             #   }
             # ]
+          )
+          @interface.send_message(response_message)
+          next
+        end
+
+        if xdbgp_cmd.class == Command::Source
+          file_path = xdbgp_cmd.parameters.flags[:f].sub('file://', '')
+          file_data = File.open(file_path).read
+
+          enc = Base64.encode64(file_data)
+          response_message = Message::Response.new(
+            command: 'source',
+            success: "1",
+            transaction_id: xdbgp_cmd.parameters.flags[:i],
+            encoding: 'base64',
+            'content' => enc
           )
           @interface.send_message(response_message)
           next

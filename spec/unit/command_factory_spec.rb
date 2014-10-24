@@ -47,5 +47,13 @@ describe CommandFactory do
       expect(command.class).to be Command::ContextGet
       expect(command.valid?).to be true
     end
+
+    it 'creates a valid source command' do
+      command = described_class.build(
+        'source -i 6 -f "file:///Volumes/Data/Users/gingermusketeer/projects/rdbgp/test.rb"'
+      )
+      expect(command.class).to be Command::Source
+      expect(command.valid?).to be true
+    end
   end
 end
