@@ -39,5 +39,13 @@ describe CommandFactory do
       expect(command.class).to be Command::ContextNames
       expect(command.valid?).to be true
     end
+
+    it 'creates a valid context_get command' do
+      command = described_class.build(
+        'context_get -i 6 -d "0" -c "0"'
+      )
+      expect(command.class).to be Command::ContextGet
+      expect(command.valid?).to be true
+    end
   end
 end
