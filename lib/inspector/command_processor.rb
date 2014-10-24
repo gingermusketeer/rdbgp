@@ -220,6 +220,19 @@ module Inspector
           next
         end
 
+        if xdbgp_cmd.class == Command::ContextNames
+          response_message = Message::Response.new(
+            command: 'context_names',
+            transaction_id: xdbgp_cmd.parameters.flags[:i],
+            context: {
+              name: 'Local',
+              id: '0'
+            }
+          )
+          @interface.send_message(response_message)
+          next
+        end
+
         cmd = commands.find { |c| c.class == command_mapping[xdbgp_cmd.class] }
         unless cmd
           puts 'Unknown command'
