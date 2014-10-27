@@ -1,5 +1,6 @@
 require "base64"
 require_relative '../rdbgp/message/response'
+require_relative '../rdbgp/message/init'
 
 module Inspector
   #
