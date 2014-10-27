@@ -283,6 +283,20 @@ module Inspector
           next
         end
 
+        if xdbgp_cmd.class == Command::StepOver
+          cmd = commands.find { |c| c.match('next') }
+          cmd.execute
+          response_message = Message::Response.new(
+            command: 'step_over',
+            status: 'break',
+            reason: 'ok',
+            transaction_id: xdbgp_cmd.parameters.flags[:i],
+          )
+          @interface.send_message(response_message)
+          next
+        end
+
+
         cmd = commands.find { |c| c.class == command_mapping[xdbgp_cmd.class] }
         unless cmd
           puts 'Unknown command'

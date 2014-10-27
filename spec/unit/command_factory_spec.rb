@@ -55,5 +55,13 @@ describe CommandFactory do
       expect(command.class).to be Command::Source
       expect(command.valid?).to be true
     end
+
+    it 'creates a valid step_over command' do
+      command = described_class.build(
+        'step_over -i 8'
+      )
+      expect(command.class).to be Command::StepOver
+      expect(command).to be_valid
+    end
   end
 end
