@@ -6,6 +6,7 @@ require_relative 'command/stack_get'
 require_relative 'command/source'
 require_relative 'command/context_names'
 require_relative 'command/context_get'
+require_relative 'command/run'
 require_relative 'command_parser'
 
 # Handles parsing a command and creating the associated command object

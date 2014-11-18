@@ -297,6 +297,19 @@ module Inspector
           next
         end
 
+        if xdbgp_cmd.class == Command::Run
+          cmd = commands.find { |c| c.match('continue') }
+          cmd.execute
+          response_message = Message::Response.new(
+            command: 'run',
+            status: 'stopped',
+            reason: 'ok',
+            transaction_id: xdbgp_cmd.parameters.flags[:i],
+          )
+          @interface.send_message(response_message)
+          next
+        end
+
 
         cmd = commands.find { |c| c.class == command_mapping[xdbgp_cmd.class] }
         unless cmd
