@@ -227,7 +227,7 @@ module Inspector
             command: 'context_names',
             transaction_id: xdbgp_cmd.parameters.flags[:i],
             context: {
-              name: 'Local',
+              name: 'Locals',
               id: '0'
             }
           )
@@ -236,16 +236,67 @@ module Inspector
         end
 
         if xdbgp_cmd.class == Command::ContextGet
+
           puts 'LOCAL VARIABLES'
           puts context.frame_locals.inspect
           properties = []
-          # context.frame_locals.keys.each do |var_name, value|
-          #
-          # end
 
+          context.frame_locals.keys.each do |var_name|
+            value = context.frame_locals[var_name]
+            numchildren = 0
+            puts 'CLASS: ' + value.class.to_s
+            case value
+            when NilClass
+              type = 'undefined'
+            when Fixnum
+              type = 'int'
+            when Float
+              type = 'float'
+            when Hash
+              type = 'hash'
+              numchildren = value.keys.length
+            when Array
+              type = 'array'
+              numchildren = value.length
+            when TrueClass
+              type = 'bool'
+            when FalseClass
+              type = 'bool'
+            else
+              type = ''
+            end
+              # 'array'
+              # 'hash'
+              # 'null'
+              # 'object'
+              # 'resource'
+              # 'bool'
+              # 'float'
+              # 'int'
+
+
+
+            property = {
+              name: var_name,
+              fullname: var_name,
+              type: type,
+              classname: value.class.name,
+              # page: 0,
+              # pagesize: 0,
+              facets: 'public',
+              children: numchildren > 1 ? 1 : 0,
+              numchildren: numchildren,
+              encoding: 'none',
+              address: value.object_id
+            }
+            property['content'] = value if !value.nil?
+            properties << property
+          end
+          puts properties.inspect
           response_message = Message::Response.new(
             command: 'context_get',
-            transaction_id: xdbgp_cmd.parameters.flags[:i]
+            transaction_id: xdbgp_cmd.parameters.flags[:i],
+            property: properties
             # property: [
             #   {
             #     name: "short_name",
